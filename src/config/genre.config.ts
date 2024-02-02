@@ -1,0 +1,27 @@
+const genre: string[] = [
+	"pop",
+	"hiphop",
+	"rock",
+	"rhythm and blue",
+	"soul",
+	"country",
+	"reggae",
+	"country",
+	"funk",
+	"folk",
+	"jazz",
+	"disco",
+	"classical",
+	"electronic",
+	"latic america",
+	"blues",
+	"new-age",
+	"vocal",
+	"christian",
+	"music of asia",
+	"ska",
+	"traditional",
+	"independent",
+];
+
+export default genre;
