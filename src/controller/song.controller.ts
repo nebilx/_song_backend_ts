@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import Song from "../model/song.model";
 import Genre from "../config/genre.config";
 
-export const genre = async (req: Request, res: Response) => {
+export const genre = async (_req: Request, res: Response) => {
 	res.status(200).json({ data: Genre });
 };
 
@@ -22,11 +22,11 @@ export const create_song = async (req: Request, res: Response) => {
 
 		return res.status(201).json({ success: true, message: "Song Created" });
 	} catch (e) {
-		res.status(500).json({ success: false, message: e });
+		return res.status(500).json({ success: false, message: e });
 	}
 };
 
-export const get_song = async (req: Request, res: Response) => {
+export const get_song = async (_req: Request, res: Response) => {
 	try {
 		const songs = await Song.find();
 
@@ -37,7 +37,7 @@ export const get_song = async (req: Request, res: Response) => {
 
 		return res.status(200).json({ success: true, data: songs });
 	} catch (e) {
-		res.status(500).json({ success: false, message: e });
+		return res.status(500).json({ success: false, message: e });
 	}
 };
 
@@ -64,7 +64,7 @@ export const update_song = async (req: Request, res: Response) => {
 			.status(201)
 			.json({ success: true, message: "Song Updated", data: song });
 	} catch (e) {
-		res.status(500).json({ success: false, message: e });
+		return res.status(500).json({ success: false, message: e });
 	}
 };
 
@@ -86,11 +86,11 @@ export const remove_song = async (req: Request, res: Response) => {
 
 		return res.status(201).json({ success: true, message: "Song Deleted" });
 	} catch (e) {
-		res.status(500).json({ success: false, message: e });
+		return res.status(500).json({ success: false, message: e });
 	}
 };
 
-export const generate_statistics = async (req: Request, res: Response) => {
+export const generate_statistics = async (_req: Request, res: Response) => {
 	try {
 		const noSongTotal = await Song.aggregate([
 			{
@@ -173,6 +173,6 @@ export const generate_statistics = async (req: Request, res: Response) => {
 			},
 		});
 	} catch (e) {
-		res.status(500).json({ success: false, message: e });
+		return res.status(500).json({ success: false, message: e });
 	}
 };

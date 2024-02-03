@@ -3,11 +3,11 @@ dotenv.config();
 
 import express, { Request, Response } from "express";
 const app = express();
-import connectDB from "./src/config/db.config";
-import songRoute from "./src/routes/song.route";
+import connectDB from "./config/db.config";
+import songRoute from "./routes/song.route";
 
 import cors from "cors";
-const PORT = process.env.PORT || 5000;
+const PORT = process.env["PORT"] || 5000;
 
 // Connect to MongoDB
 connectDB();
@@ -18,7 +18,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use("/api", songRoute);
-app.use("*", (req: Request, res: Response) =>
+app.use("*", (_req: Request, res: Response) =>
 	res.status(404).json({ message: "No API Found" }),
 );
 
