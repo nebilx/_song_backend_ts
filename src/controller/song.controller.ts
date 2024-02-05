@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import Song from "../model/song.model";
 import Genre from "../config/genre.config";
+import { errorMsg } from "../type/index.type";
 
 export const genre = async (_req: Request, res: Response) => {
   if (!Genre) {
@@ -31,11 +32,10 @@ export const create_song = async (
     await song.save();
 
     return res.status(201).json({ message: "Song Created" });
-  } catch (e: any) {
-    next({ status: e.status, message: e.message });
+  } catch (e: { message: string; status: number } | unknown) {
+    const { status, message } = handleRequestError(e, next);
+    return next({ status, message });
   }
-
-  return next({ status: 500, message: "Internal Server Error" });
 };
 
 export const get_song = async (
@@ -51,10 +51,10 @@ export const get_song = async (
     }
 
     return res.status(200).json({ data: songs });
-  } catch (e: any) {
-    next({ status: e.status, message: e.message });
+  } catch (e: { message: string; status: number } | unknown) {
+    const { status, message } = handleRequestError(e, next);
+    return next({ status, message });
   }
-  return next({ status: 500, message: "Internal Server Error" });
 };
 
 export const update_song = async (
@@ -81,10 +81,10 @@ export const update_song = async (
     }
 
     return res.status(201).json({ message: "Song Updated", data: song });
-  } catch (e: any) {
-    next({ status: e.status, message: e.message });
+  } catch (e: { message: string; status: number } | unknown) {
+    const { status, message } = handleRequestError(e, next);
+    return next({ status, message });
   }
-  return next({ status: 500, message: "Internal Server Error" });
 };
 
 export const remove_song = async (
@@ -108,10 +108,10 @@ export const remove_song = async (
     await Song.findByIdAndDelete(id);
 
     return res.status(201).json({ message: "Song Deleted" });
-  } catch (e: any) {
-    next({ status: e.status, message: e.message });
+  } catch (e: { message: string; status: number } | unknown) {
+    const { status, message } = handleRequestError(e, next);
+    return next({ status, message });
   }
-  return next({ status: 500, message: "Internal Server Error" });
 };
 
 export const generate_statistics = async (
@@ -199,8 +199,24 @@ export const generate_statistics = async (
         noSongAlbum,
       },
     });
-  } catch (e: any) {
-    next({ status: e.status, message: e.message });
+  } catch (e: { message: string; status: number } | unknown) {
+    const { status, message } = handleRequestError(e, next);
+    return next({ status, message });
   }
-  return next({ status: 500, message: "Internal Server Error" });
+};
+
+const handleRequestError = (
+  error: { message: string; status: number } | unknown,
+  _next: NextFunction
+): errorMsg => {
+  const { message, status } = error as {
+    message: string;
+    status: number;
+  };
+
+  if (!message) {
+    return { status: 500, message: "Internal Server Error" };
+  }
+
+  return { status, message };
 };

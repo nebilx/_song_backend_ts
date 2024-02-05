@@ -1,5 +1,6 @@
 import { Response, Request, NextFunction } from "express";
 import { errorMsg } from "../type/index.type";
+
 const errorhandler = (
   err: errorMsg,
   _req: Request,
